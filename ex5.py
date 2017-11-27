@@ -12,7 +12,7 @@ OUTPUT_LOCATION = 3
 DIRECTIONS_LOCATION = 4
 ERROR_INVALID_DIRECTION = "ERROR: invalid directions."
 POSSIBLE_DIRECTIONS = {'horizontal': ['u', 'd'], 'vertical': ['l', 'r'],
-                       'dia_bot_left': ['w', 'x'], 'dia_top_left': ['y', 'z']
+                       'dia_bot_left': ['z', 'w'], 'dia_top_left': ['x', 'y']
                        }
 
 
@@ -157,11 +157,11 @@ def count_words_per_direction(matrix_list, word_list):
             elif direction in POSSIBLE_DIRECTIONS['dia_top_left']:
                 word_counts.append(get_word_to_count(
                     matrix[0], word_list,
-                    direction == POSSIBLE_DIRECTIONS['dia_top_left'][1]))
+                    direction == POSSIBLE_DIRECTIONS['dia_top_left'][0]))
             elif direction in POSSIBLE_DIRECTIONS['dia_bot_left']:
                 word_counts.append(get_word_to_count(
                     matrix[0], word_list,
-                    direction == POSSIBLE_DIRECTIONS['dia_bot_left'][1]))
+                    direction == POSSIBLE_DIRECTIONS['dia_bot_left'][0]))
     return word_counts
 
 
