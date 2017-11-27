@@ -149,11 +149,11 @@ def count_words_per_direction(matrix_list, word_list):
             if direction in POSSIBLE_DIRECTIONS['horizontal']:
                 word_counts.append(get_word_to_count(
                     matrix[0], word_list,
-                    direction == POSSIBLE_DIRECTIONS['horizontal'][1]))
+                    direction == POSSIBLE_DIRECTIONS['horizontal'][0]))
             elif direction in POSSIBLE_DIRECTIONS['vertical']:
                 word_counts.append(get_word_to_count(
                     matrix[0], word_list,
-                    direction == POSSIBLE_DIRECTIONS['vertical'][1]))
+                    direction == POSSIBLE_DIRECTIONS['vertical'][0]))
             elif direction in POSSIBLE_DIRECTIONS['dia_top_left']:
                 word_counts.append(get_word_to_count(
                     matrix[0], word_list,
