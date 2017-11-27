@@ -186,6 +186,17 @@ def main(argv):
     directions = argv[DIRECTIONS_LOCATION]
     configured_matrix = configure_matrix(matrix, directions)
     word_count_list = count_words_per_direction(configured_matrix, word_list)
+
+    with open(argv[OUTPUT_LOCATION], 'w') as output_file:
+        word_to_count_dict = combine_dictionary_list(word_count_list)
+        dict_keys = list(word_to_count_dict.keys())
+        dict_keys.sort()
+        for index, word in enumerate(dict_keys):
+            if index != len(dict_keys) - 1:
+                output_file.write('{0},{1}\n'.format(word, word_to_count_dict[word]))
+            else:
+                output_file.write('{0},{1}'.format(word, word_to_count_dict[word]))
+
     print(combine_dictionary_list(word_count_list))
 
 
