@@ -17,11 +17,11 @@ class MyTestCase(unittest.TestCase):
 
     def test_LiveTest(self):
         self.assertEqual(get_word_to_count(['apple',
-                                                     'agodo',
-                                                     'nnert',
-                                                     'gatac',
-                                                     'micsr',
-                                                     'popop'], ['apple', 'pop']),
+                                            'agodo',
+                                            'nnert',
+                                            'gatac',
+                                            'micsr',
+                                            'popop'], ['apple', 'pop']),
                          {'apple': 1, 'pop': 2})
 
 

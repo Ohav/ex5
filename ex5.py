@@ -27,14 +27,19 @@ def substr_occurrences(string, sub):
             return count
 
 
-def get_word_to_count(matrix, word_list):
+def get_word_to_count(matrix, word_list, reverse=False):
     """
     For each word in the list, searches it in the matrix and returns a word-count dictionary
     """
     word_to_count = {}
     for word in word_list:
         for row_string in matrix:
-            occurrences = substr_occurrences(row_string, word)
+            occurrences = 0
+
+            if reverse is True:
+                occurrences += substr_occurrences(row_string[::-1], word)
+
+            occurrences += substr_occurrences(row_string, word)
             if occurrences > 0:
                 word_to_count[word] = word_to_count.get(word, 0) + occurrences
 
