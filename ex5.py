@@ -122,11 +122,13 @@ def check_args(arg_list):
     elif not(os.path.isfile(arg_list[MATRIX_LOCATION])):
         print(ERROR_MISSING_MATRIX)
         return False
-    #for direction in arg_list[DIRECTIONS_LOCATION]:
-    #        if str(direction) not in any(POSSIBLE_DIRECTIONS):
-    #            print(direction)
-    #            print(ERROR_INVALID_DIRECTION)
-    #            return False
+    possible_directions = ''.join([''.join(POSSIBLE_DIRECTIONS[general_direction])
+                                   for general_direction in POSSIBLE_DIRECTIONS])
+    for direction in arg_list[DIRECTIONS_LOCATION]:
+            if direction not in possible_directions:
+                print(direction)
+                print(ERROR_INVALID_DIRECTION)
+                return False
     print('all good')
     return True
 
