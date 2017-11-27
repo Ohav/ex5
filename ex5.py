@@ -11,7 +11,9 @@ ERROR_MISSING_MATRIX = "ERROR: Matrix file mat.txt does not exist."
 OUTPUT_LOCATION = 3
 DIRECTIONS_LOCATION = 4
 ERROR_INVALID_DIRECTION = "ERROR: invalid directions."
-POSSIBLE_DIRECTIONS = ['u', 'd', 'l', 'r', 'w', 'x', 'y', 'z']
+POSSIBLE_DIRECTIONS = {'horizontal': ['u', 'd'], 'vertical': ['l', 'r'],
+                       'diag_bot_left': ['w', 'x'], 'diag_top_left': ['y', 'z']
+                       }
 
 
 def substr_occurrences(string, sub):
@@ -47,14 +49,39 @@ def get_word_to_count(matrix, word_list, reverse=False):
 
 
 def split_matrix(mat, directions):
-    list_of_directions = []
-    for direction in directions:
-        if (direction == 'u' and 'd' in directions) or \
-            (direction == 'r' and 'l' in directions) or \
-            (direction == 'w' and 'z' in directions) or \
-                (direction == 'x' and 'y' in directions):
-            directions(direction)
-    print(directions)
+    possible_mat_list = []
+    # Up Down
+    if any(direction in POSSIBLE_DIRECTIONS['horizontal']
+           for direction in directions):
+        possible_mat_list.append([[mat[j][i] for j in range(len(mat))]
+                                  for i in range(len(mat[0]))])
+    # Left Right
+    if any(direction in POSSIBLE_DIRECTIONS['vertical']
+           for direction in directions):
+        # Our matrix is already organized to search rtl or ltr!
+        possible_mat_list.append(mat)
+    # Diagonal bottom left to top right (bottom = 0)
+    if any(direction in POSSIBLE_DIRECTIONS['diag_bot_left']
+           for direction in directions):
+        top_to_right = [[mat[i - j][j] for j in range(len(mat[i]))
+                         if 0 <= i - j < len(mat)]
+                        for i in range(len(mat))]
+        top_to_right.extend([[mat[-j - 1][i + j + 1]
+                              for j in range(len(mat[i]))
+                              if j + 1 <= len(mat) and j + i + 1 < len(mat[i])]
+                             for i in range(len(mat))])
+        possible_mat_list.append(top_to_right)
+    # Diagonal top left to bottom right (bottom = 0)
+    if any(direction in POSSIBLE_DIRECTIONS['diag_top_left']
+           for direction in directions):
+        left_to_bottom = [[mat[i + j][j] for j in range(len(mat[i]))
+                           if i + j < len(mat)] for i in range(len(mat))]
+        # We're missing half the values
+        left_to_bottom.extend([[mat[j][i + j] for j in range(len(mat[i]))
+                                if i + j < len(mat[i])]
+                               for i in range(1, len(mat))])
+        possible_mat_list.append(left_to_bottom)
+
 
 def check_args(arg_list):
     """Checks if the arguments received by the user are valid."""
