@@ -14,8 +14,35 @@ ERROR_INVALID_DIRECTION = "ERROR: invalid directions."
 POSSIBLE_DIRECTIONS = ['u', 'd', 'l', 'r', 'w', 'x', 'y', 'z']
 
 
+def substr_occurrences(string, sub):
+    """
+    Returns the number of occurrences of a substr in a given string
+    """
+    count = start = 0
+    while True:
+        start = string.find(sub, start) + 1
+        if start > 0:
+            count += 1
+        else:
+            return count
+
+
+def get_word_to_count(matrix, word_list):
+    """
+    For each word in the list, searches it in the matrix and returns a word-count dictionary
+    """
+    word_to_count = {}
+    for word in word_list:
+        for row_string in matrix:
+            occurrences = substr_occurrences(row_string, word)
+            if occurrences > 0:
+                word_to_count[word] = word_to_count.get(word, 0) + occurrences
+
+    return word_to_count
+
+
 def split_matrix(mat, directions):
-    list_of_directions =
+    list_of_directions = []
     for direction in directions:
         if (direction == 'u' and 'd' in directions) or \
             (direction == 'r' and 'l' in directions) or \
