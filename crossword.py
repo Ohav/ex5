@@ -1,3 +1,14 @@
+#############################################################
+# FILE : crossword.py
+# WRITERS : Matan Toledano , matancha , 313591935
+#           Ohav Barbi , ohavb , 316019488
+# EXERCISE : intro2cs ex5 2017-2018
+# DESCRIPTION: A program that gets a crossword board (matrix)
+# and a list of words and counts how many times each word
+# appears on the board, according to a given direction
+# Finally, it prints the results to a text file.
+#############################################################
+
 import os
 import sys
 
@@ -15,11 +26,11 @@ POSSIBLE_DIRECTIONS = {'horizontal': ['u', 'd'], 'vertical': ['l', 'r'],
                        'dia_bot_left': ['z', 'w'], 'dia_top_left': ['x', 'y']
                        }
 ALL_DIRECTIONS_LIST = ''.join([''.join(POSSIBLE_DIRECTIONS[general_direction])
-                                   for general_direction in POSSIBLE_DIRECTIONS])
+                               for general_direction in POSSIBLE_DIRECTIONS])
+
 
 def substr_occurrences(string, sub):
-    """Returns the number of occurrences of a substr in a given string
-    """
+    """Returns the number of occurrences of a sub-string in a given string"""
     count = start = 0
     while True:
         start = string.find(sub, start) + 1
@@ -86,14 +97,15 @@ def configure_matrix(mat, directions):
                                  for j in range(len(mat[i]))
                                  if 0 <= i - j < len(mat)])
                         for i in range(len(mat))]
+        # We're missing half the values
         top_to_right.extend([''.join([mat[-j - 1][i + j + 1]
                                       for j in range(len(mat[i]))
                                       if j + 1 <= len(mat)
                                       and j + i + 1 < len(mat[i])])
                              for i in range(len(mat))])
         conf_mat_list.append((top_to_right, fitting_directions))
-    # Diagonal top left to bottom right (bottom = 0)
 
+    # Diagonal top left to bottom right (bottom = 0)
     if any(direction in POSSIBLE_DIRECTIONS['dia_top_left']
            for direction in directions):
         fitting_directions = get_fitting_directions('dia_top_left', directions)
@@ -129,6 +141,7 @@ def check_args(arg_list):
 
 
 def combine_dictionary_list(dict_list):
+    """Gets a list of counter-dictionaries and returns a combined dictionary"""
     if not dict_list:
         return None
 
@@ -140,6 +153,9 @@ def combine_dictionary_list(dict_list):
 
 
 def count_words_per_direction(matrix_list, word_list):
+    """Gets a list of matrices and a word list, and counts how many time each
+    word appears in all of the matrices together.
+    """
     word_counts = []
     for matrix in matrix_list:
         for direction in matrix[1]:
@@ -183,6 +199,10 @@ def main(argv):
 
 
 def write_words_to_output(file_name, word_count_list):
+    """Gets a output file name and a list of counter-dictionaries, each with
+    it's own count of words.
+    The method writes the combined word count onto the file, alphabetically.
+    """
     with open(file_name, 'w') as output_file:
         final_word_count = combine_dictionary_list(word_count_list)
         dict_keys = list(final_word_count.keys())
