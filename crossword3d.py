@@ -1,6 +1,7 @@
 import os
 import sys
 import crossword
+import copy
 
 NUMBER_OF_ARGUMENTS = 5
 ERROR_MISSING_ARGUMENTS = "ERROR: Invalid number of parameters. Please enter" \
@@ -39,24 +40,53 @@ def main(argv):
     """
     if not check_args(argv):
         return
+    directions = argv[DIRECTIONS_LOCATION]
     with open(argv[MATRIX_LOCATION], 'r') as matrix_file:
-        matrices = [matrix.split('\n') for matrix in matrix_file.read().split('\n***\n')]
+        matrices = get_matrices(matrix_file, directions)
 
     with open(argv[WORD_LIST_LOCATION], 'r') as word_list_file:
         word_list = word_list_file.read().split('\n')
 
-    directions = argv[DIRECTIONS_LOCATION]
-
     word_count_all_matrices = []
     for matrix in matrices:
-        for i in range(len(matrix)):
-            matrix[i] = matrix[i].split(',')
-
         configured_matrix = crossword.configure_matrix(matrix, crossword.ALL_DIRECTIONS_LIST)
         word_count_list = crossword.count_words_per_direction(configured_matrix, word_list)
         word_count_all_matrices += word_count_list
 
     crossword.write_words_to_output(argv[OUTPUT_LOCATION], word_count_all_matrices)
+
+
+def get_matrices(matrix_file, directions):
+    matrices_to_check = []
+    original_matrices = [matrix.split('\n') for matrix in matrix_file.read().split('\n***\n')]
+
+    for matrix in original_matrices:
+        for i in range(len(matrix)):
+            matrix[i] = matrix[i].split(',')
+
+    matrix_height = len(original_matrices[0])
+    matrix_length = len(original_matrices[0][0])
+
+    if 'a' in directions:
+        matrices_to_check += original_matrices
+    if 'b' in directions:
+        row_matrices = []
+        for i in range(matrix_height):
+            row_matrices += [[matrix[i] for matrix in original_matrices]]
+        matrices_to_check += row_matrices
+    if 'c' in directions:
+        column_matrices = []
+        for i in range(matrix_length):
+            column_matrix = []
+            for matrix in original_matrices:
+                matrix_line = []
+                for line in matrix:
+                    matrix_line.append(line[i])
+                column_matrix += [matrix_line]
+            column_matrices += [column_matrix]
+        matrices_to_check += column_matrices
+
+    return matrices_to_check
 
 
 if __name__ == "__main__":
