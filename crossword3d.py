@@ -64,8 +64,9 @@ def get_matrices(matrix_file, directions):
         for i in range(len(matrix)):
             matrix[i] = matrix[i].split(',')
 
+    # Height and width must be the same for each matrix in the set
     matrix_height = len(original_matrices[0])
-    matrix_length = len(original_matrices[0][0])
+    matrix_width = len(original_matrices[0][0])
 
     if 'a' in directions:
         matrices_to_check += original_matrices
@@ -76,7 +77,7 @@ def get_matrices(matrix_file, directions):
         matrices_to_check += row_matrices
     if 'c' in directions:
         column_matrices = []
-        for i in range(matrix_length):
+        for i in range(matrix_width):
             column_matrix = []
             for matrix in original_matrices:
                 matrix_line = []
