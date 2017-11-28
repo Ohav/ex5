@@ -17,8 +17,7 @@ POSSIBLE_DIRECTIONS = {'horizontal': ['u', 'd'], 'vertical': ['l', 'r'],
 
 
 def substr_occurrences(string, sub):
-    """
-    Returns the number of occurrences of a substr in a given string
+    """Returns the number of occurrences of a substr in a given string
     """
     count = start = 0
     while True:
@@ -186,18 +185,16 @@ def main(argv):
     directions = argv[DIRECTIONS_LOCATION]
     configured_matrix = configure_matrix(matrix, directions)
     word_count_list = count_words_per_direction(configured_matrix, word_list)
+    write_words_to_output(argv[OUTPUT_LOCATION], word_count_list)
 
-    with open(argv[OUTPUT_LOCATION], 'w') as output_file:
-        word_to_count_dict = combine_dictionary_list(word_count_list)
-        dict_keys = list(word_to_count_dict.keys())
-        dict_keys.sort()
-        for index, word in enumerate(dict_keys):
-            if index != len(dict_keys) - 1:
-                output_file.write('{0},{1}\n'.format(word, word_to_count_dict[word]))
-            else:
-                output_file.write('{0},{1}'.format(word, word_to_count_dict[word]))
 
-    print(combine_dictionary_list(word_count_list))
+def write_words_to_output(file_name, word_count_list):
+    with open(file_name, 'w') as output_file:
+        final_word_count = combine_dictionary_list(word_count_list)
+        print(final_word_count)
+        for word in final_word_count:
+            output_file.write('({0},{1})\n'.format(word, final_word_count[word]))
+
 
 
 if __name__ == "__main__":
