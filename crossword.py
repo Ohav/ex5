@@ -14,7 +14,8 @@ ERROR_INVALID_DIRECTION = "ERROR: invalid directions."
 POSSIBLE_DIRECTIONS = {'horizontal': ['u', 'd'], 'vertical': ['l', 'r'],
                        'dia_bot_left': ['z', 'w'], 'dia_top_left': ['x', 'y']
                        }
-
+ALL_DIRECTIONS_LIST = ''.join([''.join(POSSIBLE_DIRECTIONS[general_direction])
+                                   for general_direction in POSSIBLE_DIRECTIONS])
 
 def substr_occurrences(string, sub):
     """Returns the number of occurrences of a substr in a given string
@@ -120,10 +121,8 @@ def check_args(arg_list):
     elif not(os.path.isfile(arg_list[MATRIX_LOCATION])):
         print(ERROR_MISSING_MATRIX)
         return False
-    possible_directions = ''.join([''.join(POSSIBLE_DIRECTIONS[general_direction])
-                                   for general_direction in POSSIBLE_DIRECTIONS])
     for direction in arg_list[DIRECTIONS_LOCATION]:
-            if direction not in possible_directions:
+            if direction not in ALL_DIRECTIONS_LIST:
                 print(ERROR_INVALID_DIRECTION)
                 return False
     return True
