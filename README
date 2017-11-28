@@ -1,0 +1,34 @@
+matancha,ohavb
+313591935,316019488
+Matan Toledano,Ohav Barbi
+
+===================================================
+    =  README for ex5: Data Structures and Files  =
+===================================================
+
+==================
+=  Description:  =
+==================
+
+The exercise's purpose is to extract from a crossword puzzle, whether each word out of a list exists.
+And if so - how many times.
+
+Files:
+crossword.py - Searches words in 2D matrices
+crossword3d.py - Searches words in 3D matrices
+
+
+======================
+=  Special Comments  =
+======================
+
+crossword.py -
+
+crossword3d.py - 3D matrices, when broken down, are just a set of 2D matrices. Thus, to get the 3D
+matrix to a list of 2D ones and reuse the previous code, was our way of tackling the problem.
+
+The main() function calls a new function get_matrices() which according to input, returns all the different 2D
+matrices the program will look for the words in. The way this function does this, is by rearranging the
+original 3D matrix to a set of 2D matrices which are equivalent to the action requested by the user.
+
+After we get to this point, this is the same problem as crossword.py
