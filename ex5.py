@@ -111,7 +111,6 @@ def configure_matrix(mat, directions):
 
 def check_args(arg_list):
     """Checks if the arguments received by the user are valid."""
-    print("Arguments received: " + str(arg_list))
     if len(arg_list) != NUMBER_OF_ARGUMENTS:
         print(ERROR_MISSING_ARGUMENTS)
         return False
@@ -125,10 +124,8 @@ def check_args(arg_list):
                                    for general_direction in POSSIBLE_DIRECTIONS])
     for direction in arg_list[DIRECTIONS_LOCATION]:
             if direction not in possible_directions:
-                print(direction)
                 print(ERROR_INVALID_DIRECTION)
                 return False
-    print('all good')
     return True
 
 
@@ -172,16 +169,14 @@ def main(argv):
     """
     if not check_args(argv):
         return
-    matrix_file = open(argv[MATRIX_LOCATION], 'r')
-    matrix = matrix_file.read().split('\n')
+    with open(argv[MATRIX_LOCATION], 'r') as matrix_file:
+        matrix = matrix_file.read().split('\n')
     for i in range(len(matrix)):
         matrix[i] = matrix[i].split(',')
-    matrix_file.close()
-    print('Matrix: ' + str(matrix))
-    word_file = open(argv[WORD_LIST_LOCATION], 'r')
-    word_list = word_file.read().split('\n')
-    word_file.close()
-    print('List: ' + str(word_list))
+
+    with open(argv[WORD_LIST_LOCATION], 'r') as word_list_file:
+        word_list = word_list_file.read().split('\n')
+
     directions = argv[DIRECTIONS_LOCATION]
     configured_matrix = configure_matrix(matrix, directions)
     word_count_list = count_words_per_direction(configured_matrix, word_list)
@@ -191,10 +186,15 @@ def main(argv):
 def write_words_to_output(file_name, word_count_list):
     with open(file_name, 'w') as output_file:
         final_word_count = combine_dictionary_list(word_count_list)
-        print(final_word_count)
-        for word in final_word_count:
-            output_file.write('({0},{1})\n'.format(word, final_word_count[word]))
-
+        dict_keys = list(final_word_count.keys())
+        dict_keys.sort()
+        for index, word in enumerate(dict_keys):
+            if index != len(dict_keys) - 1:
+                output_file.write('{0},{1}\n'
+                                  .format(word, final_word_count[word]))
+            else:
+                output_file.write('{0},{1}'
+                                  .format(word, final_word_count[word]))
 
 
 if __name__ == "__main__":
