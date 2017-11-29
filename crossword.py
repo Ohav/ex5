@@ -32,12 +32,14 @@ ALL_DIRECTIONS_LIST = ''.join([''.join(POSSIBLE_DIRECTIONS[general_direction])
 def substr_occurrences(string, sub):
     """Returns the number of occurrences of a sub-string in a given string"""
     count = start = 0
-    # We make sure both the word and the string are in lower case.
-    string = string.lower()
     sub = sub.lower()
     while True:
+        # Find returns the index of the string, or -1 if nothing was found
+        # If we get anything but -1, we know a string was found. We count it,
+        # go one forward and check again.
         start = string.find(sub, start) + 1
         if start > 0:
+            # Means word was found
             count += 1
         else:
             return count
@@ -49,12 +51,17 @@ def count_words_in_board(matrix, word_list, reverse):
     """
     word_to_count = {}
     for word in word_list:
+        # We don't care about the case of the letters in the word.
+        # However, at the output file we want to keep the original way the word
+        # was written, so we don't change 'word'.
+        word_to_check = word.lower()
         for row_string in matrix:
             occurrences = 0
             if reverse is True:
-                occurrences += substr_occurrences(row_string, word[::-1])
+                occurrences += substr_occurrences(row_string,
+                                                  word_to_check[::-1])
             else:
-                occurrences += substr_occurrences(row_string, word)
+                occurrences += substr_occurrences(row_string, word_to_check)
             if occurrences > 0:
                 word_to_count[word] = word_to_count.get(word, 0) + occurrences
     return word_to_count
@@ -79,7 +86,8 @@ def configure_matrix(mat, directions):
     if any(direction in POSSIBLE_DIRECTIONS['horizontal']
            for direction in directions):
         fitting_directions = get_fitting_directions('horizontal', directions)
-        conf_mat_list.append(([''.join([mat[j][i] for j in range(len(mat))])
+        conf_mat_list.append(([''.join([mat[j][i].lower()
+                                        for j in range(len(mat))])
                                for i in range(len(mat[0]))],
                               fitting_directions))
 
@@ -88,7 +96,8 @@ def configure_matrix(mat, directions):
            for direction in directions):
         fitting_directions = get_fitting_directions('vertical', directions)
         # Our matrix is already organized to search rtl or ltr!
-        conf_mat_list.append(([''.join([mat[i][j] for j in range(len(mat[i]))])
+        conf_mat_list.append(([''.join([mat[i][j].lower()
+                                        for j in range(len(mat[i]))])
                                for i in range(len(mat))],
                               fitting_directions))
 
@@ -96,12 +105,12 @@ def configure_matrix(mat, directions):
     if any(direction in POSSIBLE_DIRECTIONS['dia_bot_left']
            for direction in directions):
         fitting_directions = get_fitting_directions('dia_bot_left', directions)
-        top_to_right = [''.join([mat[i - j][j]
+        top_to_right = [''.join([mat[i - j][j].lower()
                                  for j in range(len(mat[i]))
                                  if 0 <= i - j < len(mat)])
                         for i in range(len(mat))]
         # We're missing half the values
-        top_to_right.extend([''.join([mat[-j - 1][i + j + 1]
+        top_to_right.extend([''.join([mat[-j - 1][i + j + 1].lower()
                                       for j in range(len(mat[i]))
                                       if j + 1 <= len(mat)
                                       and j + i + 1 < len(mat[i])])
@@ -112,12 +121,12 @@ def configure_matrix(mat, directions):
     if any(direction in POSSIBLE_DIRECTIONS['dia_top_left']
            for direction in directions):
         fitting_directions = get_fitting_directions('dia_top_left', directions)
-        left_to_bottom = [''.join([mat[i + j][j]
+        left_to_bottom = [''.join([mat[i + j][j].lower()
                                    for j in range(len(mat[i]))
                                    if i + j < len(mat)])
                           for i in range(len(mat))]
         # We're missing half the values
-        left_to_bottom.extend([''.join([mat[j][i + j]
+        left_to_bottom.extend([''.join([mat[j][i + j].lower()
                                         for j in range(len(mat[i]))
                                         if i + j < len(mat[i])])
                                for i in range(1, len(mat))])
