@@ -40,7 +40,7 @@ def substr_occurrences(string, sub):
             return count
 
 
-def get_word_to_count(matrix, word_list, reverse=False):
+def count_words_in_board(matrix, word_list, reverse=False):
     """For each word in the list, searches it in the matrix and returns a
     word-count dictionary
     """
@@ -160,19 +160,19 @@ def count_words_per_direction(matrix_list, word_list):
     for matrix in matrix_list:
         for direction in matrix[1]:
             if direction in POSSIBLE_DIRECTIONS['horizontal']:
-                word_counts.append(get_word_to_count(
+                word_counts.append(count_words_in_board(
                     matrix[0], word_list,
                     direction == POSSIBLE_DIRECTIONS['horizontal'][0]))
             elif direction in POSSIBLE_DIRECTIONS['vertical']:
-                word_counts.append(get_word_to_count(
+                word_counts.append(count_words_in_board(
                     matrix[0], word_list,
                     direction == POSSIBLE_DIRECTIONS['vertical'][0]))
             elif direction in POSSIBLE_DIRECTIONS['dia_top_left']:
-                word_counts.append(get_word_to_count(
+                word_counts.append(count_words_in_board(
                     matrix[0], word_list,
                     direction == POSSIBLE_DIRECTIONS['dia_top_left'][0]))
             elif direction in POSSIBLE_DIRECTIONS['dia_bot_left']:
-                word_counts.append(get_word_to_count(
+                word_counts.append(count_words_in_board(
                     matrix[0], word_list,
                     direction == POSSIBLE_DIRECTIONS['dia_bot_left'][0]))
     return word_counts

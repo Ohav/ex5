@@ -10,8 +10,8 @@ Matan Toledano,Ohav Barbi
 =  Description:  =
 ==================
 
-The exercise's purpose is to extract from a crossword puzzle, whether each word out of a list exists.
-And if so - how many times.
+The exercise's purpose is to extract from a crossword puzzle, whether each word
+out of a list exists and if so - how many times.
 
 Files:
 crossword.py - Searches words in 2D matrices
@@ -22,13 +22,29 @@ crossword3d.py - Searches words in 3D matrices
 =  Special Comments  =
 ======================
 
-crossword.py -
+crossword.py - Searching a specific board through a different direction, is
+    the same as searching an adjusted board in the same direction. That concept
+    drove us and we created a single function, count_words_in_board that gets a
+    board and searches for words from a word list, either RTL or LTR
+    (since it's the same board, reverse word).
+For that to work, we built configure_matrix, a function that gets a board and
+    'rotates' it to the appropriate orientation of the board, depending on
+	direction.
+Following that we created some helper functions, such as searching for a word
+    in a string, combining a list of counter-dictionaries into a single
+    dictionary, and outputting a dictionary to a file, all to make our code
+    more methodical and reusable.
 
-crossword3d.py - 3D matrices, when broken down, are just a set of 2D matrices. Thus, to get the 3D
-matrix to a list of 2D ones and reuse the previous code, was our way of tackling the problem.
+crossword3d.py - 3D matrices, when broken down, are just a set of 2D matrices.
+    Thus, to get the 3D matrix to a list of 2D ones and reuse the previous
+    code, was our way of tackling the problem.
 
-The main() function calls a new function get_matrices() which according to input, returns all the different 2D
-matrices the program will look for the words in. The way this function does this, is by rearranging the
-original 3D matrix to a set of 2D matrices which are equivalent to the action requested by the user.
-
+The main() function calls a new function get_matrices() which according to
+    input, returns all the different 2D matrices the program will look for the
+    words in. The way this function does this, is by rearranging the original
+    3D matrix to a set of 2D matrices which are equivalent to the action
+    requested by the user.
 After we get to this point, this is the same problem as crossword.py
+Because we were very methodical with our code with 2D boards, it was easy to simply create
+    the appropriate list of boards according to the direction given, and then use functions from
+    crossword.py to get a word count for each board, combine the dictionaries and output to file.
