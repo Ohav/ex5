@@ -13,12 +13,12 @@ import os
 import sys
 
 NUMBER_OF_ARGUMENTS = 5
-ERROR_MISSING_ARGUMENTS = "ERROR: Invalid number of parameters. Please enter" \
-                           "word_file matrix_file output_file directions."
+ERROR_MISSING_ARGUMENTS = "ERROR: Invalid number of parameters. Please " \
+                          "enter word_file matrix_file output_file directions."
 WORD_LIST_LOCATION = 1
-ERROR_MISSING_WORDS = "ERROR: Word file word_list.txt does not exist."
+ERROR_MISSING_WORDS = "ERROR: Word file {0} does not exist."
 MATRIX_LOCATION = 2
-ERROR_MISSING_MATRIX = "ERROR: Matrix file mat.txt does not exist."
+ERROR_MISSING_MATRIX = "ERROR: Matrix file {0} does not exist."
 OUTPUT_LOCATION = 3
 DIRECTIONS_LOCATION = 4
 ERROR_INVALID_DIRECTION = "ERROR: invalid directions."
@@ -32,6 +32,9 @@ ALL_DIRECTIONS_LIST = ''.join([''.join(POSSIBLE_DIRECTIONS[general_direction])
 def substr_occurrences(string, sub):
     """Returns the number of occurrences of a sub-string in a given string"""
     count = start = 0
+    # We make sure both the word and the string are in lower case.
+    string = string.lower()
+    sub = sub.lower()
     while True:
         start = string.find(sub, start) + 1
         if start > 0:
@@ -40,7 +43,7 @@ def substr_occurrences(string, sub):
             return count
 
 
-def count_words_in_board(matrix, word_list, reverse=False):
+def count_words_in_board(matrix, word_list, reverse):
     """For each word in the list, searches it in the matrix and returns a
     word-count dictionary
     """
@@ -122,24 +125,6 @@ def configure_matrix(mat, directions):
     return conf_mat_list
 
 
-def check_args(arg_list):
-    """Checks if the arguments received by the user are valid."""
-    if len(arg_list) != NUMBER_OF_ARGUMENTS:
-        print(ERROR_MISSING_ARGUMENTS)
-        return False
-    if not (os.path.isfile(arg_list[WORD_LIST_LOCATION])):
-        print(ERROR_MISSING_WORDS)
-        return False
-    elif not(os.path.isfile(arg_list[MATRIX_LOCATION])):
-        print(ERROR_MISSING_MATRIX)
-        return False
-    for direction in arg_list[DIRECTIONS_LOCATION]:
-            if direction not in ALL_DIRECTIONS_LIST:
-                print(ERROR_INVALID_DIRECTION)
-                return False
-    return True
-
-
 def combine_dictionary_list(dict_list):
     """Gets a list of counter-dictionaries and returns a combined dictionary"""
     if not dict_list:
@@ -176,6 +161,24 @@ def count_words_per_direction(matrix_list, word_list):
                     matrix[0], word_list,
                     direction == POSSIBLE_DIRECTIONS['dia_bot_left'][0]))
     return word_counts
+
+
+def check_args(arg_list, possible_directions=ALL_DIRECTIONS_LIST):
+    """Checks if the arguments received by the user are valid."""
+    if len(arg_list) != NUMBER_OF_ARGUMENTS:
+        print(ERROR_MISSING_ARGUMENTS)
+        return False
+    if not (os.path.isfile(arg_list[WORD_LIST_LOCATION])):
+        print(ERROR_MISSING_WORDS.format(arg_list[WORD_LIST_LOCATION]))
+        return False
+    elif not(os.path.isfile(arg_list[MATRIX_LOCATION])):
+        print(ERROR_MISSING_MATRIX.format(arg_list[MATRIX_LOCATION]))
+        return False
+    for direction in arg_list[DIRECTIONS_LOCATION]:
+            if direction not in possible_directions:
+                print(ERROR_INVALID_DIRECTION)
+                return False
+    return True
 
 
 def main(argv):

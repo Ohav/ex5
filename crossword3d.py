@@ -16,41 +16,18 @@ import sys
 import crossword
 
 NUMBER_OF_ARGUMENTS = 5
-ERROR_MISSING_ARGUMENTS = "ERROR: Invalid number of parameters. Please enter" \
-                           "word_file matrix_file output_file directions."
 WORD_LIST_LOCATION = 1
-ERROR_MISSING_WORDS = "ERROR: Word file word_list.txt does not exist."
 MATRIX_LOCATION = 2
-ERROR_MISSING_MATRIX = "ERROR: Matrix file mat.txt does not exist."
 OUTPUT_LOCATION = 3
 DIRECTIONS_LOCATION = 4
-ERROR_INVALID_DIRECTION = "ERROR: invalid directions."
 POSSIBLE_DIRECTIONS = ['a', 'b', 'c']
-
-
-def check_args(arg_list):
-    """Checks if the arguments received by the user are valid."""
-    if len(arg_list) != NUMBER_OF_ARGUMENTS:
-        print(ERROR_MISSING_ARGUMENTS)
-        return False
-    if not (os.path.isfile(arg_list[WORD_LIST_LOCATION])):
-        print(ERROR_MISSING_WORDS)
-        return False
-    elif not(os.path.isfile(arg_list[MATRIX_LOCATION])):
-        print(ERROR_MISSING_MATRIX)
-        return False
-    for direction in arg_list[DIRECTIONS_LOCATION]:
-            if direction not in POSSIBLE_DIRECTIONS:
-                print(ERROR_INVALID_DIRECTION)
-                return False
-    return True
 
 
 def main(argv):
     """Main part of the program, loads the arguments into files and executes
     the main logic.
     """
-    if not check_args(argv):
+    if not crossword.check_args(argv, POSSIBLE_DIRECTIONS):
         return
     directions = argv[DIRECTIONS_LOCATION]
     with open(argv[MATRIX_LOCATION], 'r') as matrix_file:
